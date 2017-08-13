@@ -2,7 +2,11 @@
 
 namespace Drupal\ui_patterns_ds;
 
+<<<<<<< 11066008a6345ca02c5d43e7a0afb188b6b9c25a
 use Drupal\Core\Entity\ContentEntityBase;
+=======
+use Drupal\ui_patterns\UiPatternsSettings;
+>>>>>>> PATTERN-SETTINGS: Fix phpcs errors
 
 /**
  * Class FieldTemplateProcessor.
@@ -126,12 +130,13 @@ class FieldTemplateProcessor implements FieldTemplateProcessorInterface {
   protected function getContext() {
     // Preprocess settings
     $element = $this->variables['element'];
+
     $ui_pattern_settings = isset($this->variables['ds-config']['settings']) ? $this->variables['ds-config']['settings'] : [];
     $processed_settings = [];
     if (isset($ui_pattern_settings['pattern'])) {
       $pattern_id = $ui_pattern_settings['pattern'];
       $settings = isset($ui_pattern_settings['settings']) ? $ui_pattern_settings['settings'] : [];
-      $processed_settings = \Drupal\ui_patterns\UiPatternsSettings::preprocess($pattern_id, $settings, isset($this->variables['element']['#object']) ? $this->variables['element']['#object'] : NULL);
+      $processed_settings = UiPatternsSettings::preprocess($pattern_id, $settings, isset($this->variables['element']['#object']) ? $this->variables['element']['#object'] : NULL);
     }
 
     return [
