@@ -2,11 +2,8 @@
 
 namespace Drupal\ui_patterns_ds;
 
-<<<<<<< 11066008a6345ca02c5d43e7a0afb188b6b9c25a
 use Drupal\Core\Entity\ContentEntityBase;
-=======
 use Drupal\ui_patterns\UiPatternsSettings;
->>>>>>> PATTERN-SETTINGS: Fix phpcs errors
 
 /**
  * Class FieldTemplateProcessor.
