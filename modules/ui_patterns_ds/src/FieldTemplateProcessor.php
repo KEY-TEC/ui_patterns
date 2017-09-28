@@ -2,6 +2,7 @@
 
 namespace Drupal\ui_patterns_ds;
 
+use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\ui_patterns\UiPatternsSettings;
 
 /**
@@ -31,10 +32,12 @@ class FieldTemplateProcessor implements FieldTemplateProcessorInterface {
         $fields[$mapping['destination']][] = $this->getSourceValue($mapping, $delta);
       }
 
+      $settings = isset($variables['ds-config']['settings']['settings']) ? $variables['ds-config']['settings']['settings'] : [];
       $content['pattern_' . $delta] = [
         '#type' => 'pattern',
         '#id' => $this->getPatternId(),
         '#fields' => $fields,
+        '#settings' => $settings,
         '#context' => $this->getContext(),
         '#multiple_sources' => TRUE,
       ];
@@ -125,6 +128,8 @@ class FieldTemplateProcessor implements FieldTemplateProcessorInterface {
    */
   protected function getContext() {
 
+    $element = $this->variables['element'];
+
     $ui_pattern_settings = isset($this->variables['ds-config']['settings']) ? $this->variables['ds-config']['settings'] : [];
     $processed_settings = [];
     if (isset($ui_pattern_settings['pattern'])) {
@@ -133,12 +138,18 @@ class FieldTemplateProcessor implements FieldTemplateProcessorInterface {
       $processed_settings = UiPatternsSettings::preprocess($pattern_id, $settings, isset($this->variables['element']['#object']) ? $this->variables['element']['#object'] : NULL);
     }
 
+    $entity = NULL;
+    if (isset($element['#object']) && is_object($element['#object']) && $element['#object'] instanceof ContentEntityBase) {
+      $entity = $element['#object'];
+    }
+
     return [
       'type' => 'ds_field_template',
       'field_name' => $this->getFieldName(),
-      'entity_type' => $this->variables['element']['#entity_type'],
-      'bundle' => $this->variables['element']['#bundle'],
-      'view_mode' => $this->variables['element']['#view_mode'],
+      'entity_type' => $element['#entity_type'],
+      'bundle' => $element['#bundle'],
+      'view_mode' => $element['#view_mode'],
+      'entity' => $entity,
       'settings' => $processed_settings,
     ];
   }

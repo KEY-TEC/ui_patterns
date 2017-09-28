@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\ui_patterns\Unit\Definition;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\predicate\equals;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Tests\ui_patterns\Unit\AbstractUiPatternsTest;
 use Drupal\ui_patterns\Definition\PatternDefinition;
@@ -22,7 +20,7 @@ class PatternDefinitionTest extends AbstractUiPatternsTest {
    */
   public function testGettersSetters($getter, $name, $value) {
     $pattern_definition = new PatternDefinition([$name => $value]);
-    assert($value, equals(call_user_func([$pattern_definition, $getter])));
+    expect($value)->to->equal(call_user_func([$pattern_definition, $getter]));
   }
 
   /**
@@ -39,18 +37,43 @@ class PatternDefinitionTest extends AbstractUiPatternsTest {
     ];
     $pattern_definition = new PatternDefinition();
     $pattern_definition->setFields($fields);
-    assert($pattern_definition->getField('name')->getLabel(), equals($fields['name']['label']));
-    assert($pattern_definition->getField('name')->getName(), equals($fields['name']['name']));
-    assert($pattern_definition->getField('name')->getType(), equals(NULL));
-    assert($pattern_definition->getField('name')->getDescription(), equals(NULL));
-    assert($pattern_definition->getField('name')->getPreview(), equals(NULL));
+    expect($pattern_definition->getField('name')->getLabel())->to->equal($fields['name']['label']);
+    expect($pattern_definition->getField('name')->getName())->to->equal($fields['name']['name']);
+    expect($pattern_definition->getField('name')->getType())->to->equal(NULL);
+    expect($pattern_definition->getField('name')->getDescription())->to->equal(NULL);
+    expect($pattern_definition->getField('name')->getPreview())->to->equal(NULL);
 
     $pattern_definition->getField('name')->setType('type');
     $pattern_definition->getField('name')->setPreview('preview');
     $pattern_definition->getField('name')->setDescription('description');
-    assert($pattern_definition->getField('name')->getType(), equals('type'));
-    assert($pattern_definition->getField('name')->getDescription(), equals('description'));
-    assert($pattern_definition->getField('name')->getPreview(), equals('preview'));
+    expect($pattern_definition->getField('name')->getType())->to->equal('type');
+    expect($pattern_definition->getField('name')->getDescription())->to->equal('description');
+    expect($pattern_definition->getField('name')->getPreview())->to->equal('preview');
+  }
+
+  /**
+   * Test field singleton.
+   *
+   * @dataProvider definitionGettersProvider
+   */
+  public function testSettings() {
+    $settings = [
+      'name' => [
+        'name' => 'name',
+        'label' => 'Label',
+      ],
+    ];
+    $pattern_definition = new PatternDefinition();
+    $pattern_definition->setSettings($settings);
+    assert($pattern_definition->getSetting('name')->getLabel(), equals($settings['name']['label']));
+    assert($pattern_definition->getSetting('name')->getName(), equals($settings['name']['name']));
+    assert($pattern_definition->getSetting('name')->getType(), equals(NULL));
+    assert($pattern_definition->getSetting('name')->getDescription(), equals(NULL));
+
+    $pattern_definition->getSetting('name')->setType('type');
+    $pattern_definition->getSetting('name')->setDescription('description');
+    assert($pattern_definition->getSetting('name')->getType(), equals('type'));
+    assert($pattern_definition->getSetting('name')->getDescription(), equals('description'));
   }
 
   /**
@@ -86,7 +109,18 @@ class PatternDefinitionTest extends AbstractUiPatternsTest {
   public function testFieldsProcessing($actual, $expected) {
     $pattern_definition = new PatternDefinition();
     $data = $pattern_definition->setFields($actual)->toArray();
-    assert($data['fields'], equals($expected));
+    expect($data['fields'])->to->be->loosely->equal($expected);
+  }
+
+  /**
+   * Test settings processing.
+   *
+   * @dataProvider settingsProcessingProvider
+   */
+  public function testSettingsProcessing($actual, $expected) {
+    $pattern_definition = new PatternDefinition();
+    $data = $pattern_definition->setSettings($actual)->toArray();
+    assert($data['settings'], equals($expected));
   }
 
   /**

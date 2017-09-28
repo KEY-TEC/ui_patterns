@@ -2,6 +2,7 @@
 
 namespace Drupal\ui_patterns_field_group\Plugin\field_group\FieldGroupFormatter;
 
+use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\field_group\FieldGroupFormatterBase;
 use Drupal\ui_patterns\Form\PatternDisplayFormTrait;
@@ -87,6 +88,7 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
     $element['#type'] = 'pattern';
     $element['#id'] = $this->getSetting('pattern');
     $element['#fields'] = $fields;
+    $element['#settings'] = isset($this->configuration['settings']['settings']) ? $this->configuration['settings']['settings'] : [];
     $element['#multiple_sources'] = TRUE;
 
     // Allow default context values to not override those exposed elsewhere.
@@ -98,12 +100,26 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
     $element['#context']['settings'] = isset($this->configuration['settings']['settings']) ? $this->configuration['settings']['settings'] : [];
 
     // Pass current entity to pattern context, if any.
-    if (!empty($element['#fields'])) {
-      $field = reset($element['#fields']);
-      if (isset($field['#object'])) {
-        $element['#context']['entity'] = $field['#object'];
+    $element['#context']['entity'] = $this->findEntity($element['#fields']);
+  }
+
+  /**
+   * Look for entity object in fields array.
+   *
+   * @param array $fields
+   *    Fields array.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityBase|null
+   *    Entity object or NULL if none found.
+   */
+  protected function findEntity(array $fields) {
+    foreach ($fields as $field) {
+      if (isset($field['#object']) && is_object($field['#object']) && $field['#object'] instanceof ContentEntityBase) {
+        return $field['#object'];
       }
+      return $this->findEntity($field);
     }
+    return NULL;
   }
 
   /**

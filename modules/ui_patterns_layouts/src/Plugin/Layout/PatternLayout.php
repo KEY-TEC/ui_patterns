@@ -71,10 +71,14 @@ class PatternLayout extends LayoutDefault implements PluginFormInterface, Contai
       $fields[$region_name] = $regions[$region_name];
     }
 
+    // Patterns settings to be passed along in a render array fashion.
+    $settings = isset($configuration['pattern']['settings']) ? $configuration['pattern']['settings'] : [];
+
     return [
       '#type' => 'pattern',
       '#id' => $this->getPluginDefinition()->get('additional')['pattern'],
       '#fields' => $fields,
+      '#settings' => $settings,
     ];
   }
 
