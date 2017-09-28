@@ -65,13 +65,11 @@ class TokenSettingType extends PatternSettingTypeBase {
     $entity = isset($context['entity']) ? $context['entity'] : NULL;
     $return_value = '';
     if (!empty($value) && $entity !== NULL) {
-      if (is_array($value) && isset($value['input'])) {
+      if (is_array($value) && empty($value['input']) == FALSE) {
         $value = $value['input'];
       }
-      if (!empty($value)) {
-        $token_service = \Drupal::token();
-        $return_value = $token_service->replace($value, array($entity->getEntityTypeId() => $entity));
-      }
+      $token_service = \Drupal::token();
+      $return_value = $token_service->replace($value, array($entity->getEntityTypeId() => $entity));
     }
     return $return_value;
   }

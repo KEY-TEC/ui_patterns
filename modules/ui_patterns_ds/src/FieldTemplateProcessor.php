@@ -131,12 +131,15 @@ class FieldTemplateProcessor implements FieldTemplateProcessorInterface {
     $element = $this->variables['element'];
 
     $ui_pattern_settings = isset($this->variables['ds-config']['settings']) ? $this->variables['ds-config']['settings'] : [];
+<<<<<<< HEAD
     $processed_settings = [];
     if (isset($ui_pattern_settings['pattern'])) {
       $pattern_id = $ui_pattern_settings['pattern'];
       $settings = isset($ui_pattern_settings['settings']) ? $ui_pattern_settings['settings'] : [];
       $processed_settings = UiPatternsSettings::preprocess($pattern_id, $settings, isset($this->variables['element']['#object']) ? $this->variables['element']['#object'] : NULL);
     }
+=======
+>>>>>>> f4bae065b321e1923e09f0d867da491479f12ce1
 
     $entity = NULL;
     if (isset($element['#object']) && is_object($element['#object']) && $element['#object'] instanceof ContentEntityBase) {
@@ -150,7 +153,11 @@ class FieldTemplateProcessor implements FieldTemplateProcessorInterface {
       'bundle' => $element['#bundle'],
       'view_mode' => $element['#view_mode'],
       'entity' => $entity,
+<<<<<<< HEAD
       'settings' => $processed_settings,
+=======
+      'settings' => $ui_pattern_settings,
+>>>>>>> f4bae065b321e1923e09f0d867da491479f12ce1
     ];
   }
 

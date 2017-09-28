@@ -143,7 +143,10 @@ class Pattern extends RenderElement {
           $element[$key] = $setting;
         }
         else {
-          if (is_array($element[$key]) && is_array($setting)) {
+          if ($setting instanceof Attribute && $element[$key] instanceof Attribute) {
+            $element[$key] = new Attribute(array_merge($setting->toArray(), $element[$key]->toArray()));
+          }
+          elseif (is_array($element[$key]) && is_array($setting)) {
             $element[$key] = array_merge($element[$key], $setting);
           }
         }
@@ -211,32 +214,19 @@ class Pattern extends RenderElement {
   }
 
   /**
-   * Process contextual links, if any.
+   * Whereas pattern has settings or not.
    *
-   * @param array $element
-   *   Render array.
-   *
-   */
-  public static function processContextualLinks(array $element) {
-    if (isset($element['#contextual_links']) && \Drupal::moduleHandler()
-        ->moduleExists('contextual')
-    ) {
-      $placeholder = [
-        '#type' => 'contextual_links_placeholder',
-        '#id' => _contextual_links_to_id($element['#contextual_links']),
-      ];
-      $element['#suffix'] = render($placeholder);
-    }
-
-    return $element;
-  }
-    /*
-    * Whereas pattern has settings or not.
    * @return bool
    *    TRUE or FALSE.
    */
   public static function hasSettings($element) {
-    return isset($element['#settings']) && !empty($element['#settings']) && is_array($element['#settings']);
+    $definition = UiPatterns::getPatternDefinition($element['#id']);
+    if ($definition != NULL && count($definition->getSettings()) != 0) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
   }
 
   /**
