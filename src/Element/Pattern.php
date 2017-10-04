@@ -30,7 +30,6 @@ class Pattern extends RenderElement {
         [$class, 'processFields'],
         [$class, 'processSettings'],
         [$class, 'processUse'],
-        [$class, 'processContextualLinks'],
       ],
     ];
   }
