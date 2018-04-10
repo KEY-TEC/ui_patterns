@@ -15,8 +15,6 @@ use Drupal\ui_patterns\Plugin\PatternSettingTypeBase;
  */
 class BooleanSettingType extends PatternSettingTypeBase {
 
-  use StringTranslationTrait;
-
   /**
    * {@inheritdoc}
    */

@@ -16,8 +16,6 @@ use Drupal\ui_patterns\Plugin\PatternSettingTypeBase;
  */
 class TokenSettingType extends PatternSettingTypeBase {
 
-  use StringTranslationTrait;
-
   /**
    * {@inheritdoc}
    */

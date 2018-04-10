@@ -17,8 +17,6 @@ use Drupal\ui_patterns\Plugin\PatternSettingTypeBase;
  */
 class AttributesSettingType extends PatternSettingTypeBase {
 
-  use StringTranslationTrait;
-
   /**
    * {@inheritdoc}
    */
