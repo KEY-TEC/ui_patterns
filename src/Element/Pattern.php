@@ -95,7 +95,23 @@ class Pattern extends RenderElement {
       }
     }
     else {
-      $element['#markup'] = '';
+      // There are maybe regions added to the pattern by third party
+      // modules. For example layout builder adds the 'Add Block' link.
+      // So simple remap them.
+      $definition = UiPatterns::getPatternDefinition($element['#id']);
+      // Check if the pattern is empty
+      $empty_fields = TRUE;
+      foreach ($definition->getFields() as $key => $field) {
+        if (isset($element[$key])) {
+          $element['#' . $key] = $element[$key];
+          unset($element[$key]);
+          $empty_fields = FALSE;
+        }
+      }
+
+      if ($empty_fields == TRUE) {
+        $element['#markup'] = '';
+      }
     }
     return $element;
   }
