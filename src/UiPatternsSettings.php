@@ -3,6 +3,7 @@
 namespace Drupal\ui_patterns;
 
 use Drupal\Core\Entity\Entity;
+use Drupal\Core\Entity\EntityBase;
 use Drupal\ui_patterns\Definition\PatternDefinitionSetting;
 
 /**
@@ -29,10 +30,10 @@ class UiPatternsSettings {
    *    Pattern ID for which to preprocess.
    * @param array $settings
    *    The stored settings.
-   * @param \Drupal\Core\Entity\Entity $entity
+   * @param \Drupal\Core\Entity\EntityBase $entity
    *    The entity of the pattern. Useful for dynamic settings.
    */
-  public static function preprocess($pattern_id, $settings, Entity $entity = NULL) {
+  public static function preprocess($pattern_id, $settings, EntityBase $entity = NULL) {
     $processed_settings = [];
     $pattern = UiPatterns::getPatternDefinition($pattern_id);
     $context = [];
